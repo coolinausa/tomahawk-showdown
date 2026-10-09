@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Coolina Tomahawk Showdown — Cast Your Vote</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#FF0000;
+    --red-deep:#cc0000;
+    --ink:#0E0E0E;
+    --ink-2:#141414;
+    --panel:#161616;
+    --panel-2:#1c1c1c;
+    --line:#2a2a2a;
+    --white:#ffffff;
+    --muted:#9a9a9a;
+    --head:"Oswald",sans-serif;
+    --body:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--ink);color:var(--white);font-family:var(--body);
+    -webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  .display{font-family:var(--head);text-transform:uppercase;font-weight:700;letter-spacing:.5px;}
+
+  /* ---------- BRAND BAR ---------- */
+  .topbar{border-bottom:1px solid var(--line);background:#0b0b0b;}
+  .topbar-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:12px;
+    padding:14px 18px;}
+  .mark{display:flex;align-items:center;gap:11px;}
+  .mark svg{width:26px;height:26px;display:block;}
+  .wordmark{font-family:var(--head);font-weight:700;text-transform:uppercase;
+    letter-spacing:4px;font-size:20px;}
+  .topbar .tag{margin-left:auto;font-family:var(--head);font-weight:500;text-transform:uppercase;
+    letter-spacing:2px;font-size:12px;color:var(--muted);}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;overflow:hidden;padding:74px 20px 58px;text-align:center;
+    background:linear-gradient(180deg,#161616,#0e0e0e);
+    border-bottom:1px solid var(--line);}
+  .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+  .hero-overlay{position:absolute;inset:0;z-index:1;
+    background:
+      radial-gradient(900px 420px at 50% -80px, rgba(255,0,0,.40), transparent 66%),
+      linear-gradient(180deg, rgba(14,14,14,.58) 0%, rgba(14,14,14,.50) 45%, rgba(14,14,14,.88) 100%);}
+  .hero-content{position:relative;z-index:2;}
+  .kicker{display:inline-block;font-family:var(--head);font-weight:600;font-size:12px;
+    letter-spacing:3px;text-transform:uppercase;color:#fff;background:var(--red);
+    padding:8px 15px;border-radius:2px;}
+  .hero h1{font-family:var(--head);font-weight:700;text-transform:uppercase;
+    font-size:clamp(44px,9vw,104px);line-height:.9;margin:20px 0 10px;letter-spacing:1px;}
+  .hero h1 .r{color:var(--red);}
+  .hero p{max-width:640px;margin:10px auto 0;color:var(--muted);font-size:16px;line-height:1.55;}
+  .rules{margin:26px auto 0;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .chip{font-size:12.5px;color:#e6e6e6;background:rgba(255,255,255,.04);
+    border:1px solid var(--line);padding:9px 14px;border-radius:2px;
+    font-weight:600;letter-spacing:.3px;}
+  .chip b{color:var(--red);}
+
+  /* ---------- GRID ---------- */
+  .wrap{max-width:1200px;margin:0 auto;padding:38px 16px 170px;}
+  .section-label{font-family:var(--head);font-weight:700;text-transform:uppercase;
+    letter-spacing:2px;font-size:26px;margin:0 4px 22px;}
+  .section-label .bar-accent{color:var(--red);}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:3px;
+    overflow:hidden;display:flex;flex-direction:column;position:relative;
+    transition:transform .14s ease,border-color .14s ease,box-shadow .18s ease;}
+  .card:hover{transform:translateY(-3px);border-color:#3a3a3a;}
+  .card.picked{border-color:var(--red);
+    box-shadow:0 0 0 2px var(--red),0 16px 46px rgba(255,0,0,.30);}
+  .badge{position:absolute;top:10px;left:10px;z-index:5;background:var(--red);
+    color:#fff;font-family:var(--head);font-weight:700;font-size:11px;letter-spacing:2px;
+    padding:6px 11px;border-radius:2px;display:none;text-transform:uppercase;}
+  .card.picked .badge{display:block;}
+  .rank{position:absolute;top:10px;right:10px;z-index:5;background:rgba(0,0,0,.66);
+    border:1px solid var(--line);color:#cfcfcf;font-family:var(--head);font-weight:600;
+    font-size:12px;letter-spacing:1px;padding:5px 9px;border-radius:2px;}
+  .embed{background:#000;position:relative;height:560px;}
+  .embed iframe.ig{position:absolute;inset:0;width:100%;height:100%;display:block;border:0;
+    background:#000;opacity:0;transition:opacity .4s ease;z-index:2;}
+  .embed .fallback{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;gap:10px;
+    align-items:center;justify-content:center;background:#000;color:#bbb;text-align:center;
+    padding:24px;font-weight:600;text-decoration:none;}
+  .embed .fallback .play{width:56px;height:56px;border-radius:50%;background:var(--red);
+    display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;}
+  .embed .fallback small{color:var(--muted);font-weight:500;}
+  /* Real thumbnail preview for collab reels Instagram won't embed inline */
+  .embed .fallback.noembed{z-index:3;padding:0;background-size:cover;background-position:center;
+    background-repeat:no-repeat;justify-content:center;}
+  .embed .fallback.noembed .play-lg{width:66px;height:66px;border-radius:50%;
+    background:rgba(255,0,0,.92);display:flex;align-items:center;justify-content:center;
+    font-size:24px;color:#fff;box-shadow:0 8px 30px rgba(0,0,0,.55);padding-left:4px;}
+  .embed .fallback.noembed .nb-foot{position:absolute;left:0;right:0;bottom:0;
+    padding:26px 14px 14px;font-family:var(--head);font-weight:600;letter-spacing:1px;
+    text-transform:uppercase;font-size:12px;color:#fff;text-align:center;
+    background:linear-gradient(transparent, rgba(8,8,8,.9));}
+  .cardfoot{padding:14px 15px 15px;display:flex;flex-direction:column;gap:12px;
+    border-top:1px solid var(--line);background:var(--panel-2);}
+  .who{display:flex;align-items:center;gap:9px;}
+  .who .dot{width:8px;height:8px;background:var(--red);flex:0 0 auto;}
+  .handle{font-family:var(--head);font-weight:600;font-size:17px;letter-spacing:.5px;
+    text-transform:uppercase;}
+  .openig{margin-left:auto;font-size:11px;color:var(--muted);text-decoration:none;
+    border:1px solid var(--line);padding:5px 9px;border-radius:2px;letter-spacing:1px;
+    text-transform:uppercase;font-weight:600;}
+  .openig:hover{color:#fff;border-color:#444;}
+  .pickbtn{appearance:none;border:1px solid var(--red);background:transparent;color:#fff;
+    font-family:var(--head);font-weight:600;font-size:15px;letter-spacing:1.5px;padding:13px;
+    border-radius:2px;cursor:pointer;text-transform:uppercase;transition:all .13s ease;}
+  .pickbtn:hover{background:rgba(255,0,0,.14);}
+  .card.picked .pickbtn{background:var(--red);border-color:var(--red);}
+
+  /* ---------- STICKY VOTE BAR ---------- */
+  .bar{position:fixed;left:0;right:0;bottom:0;z-index:40;
+    background:rgba(8,8,8,.95);backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);padding:13px 16px;}
+  .bar-in{max-width:1200px;margin:0 auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+  .pickstate{font-size:14px;color:var(--muted);flex:1 1 200px;min-width:170px;
+    font-weight:600;letter-spacing:.3px;}
+  .pickstate b{color:#fff;font-family:var(--head);font-weight:600;letter-spacing:.5px;
+    text-transform:uppercase;font-size:16px;}
+  .pickstate .none{color:var(--muted);font-family:var(--body);font-weight:600;text-transform:none;}
+  .handle-in{display:flex;align-items:center;background:var(--panel-2);
+    border:1px solid var(--line);border-radius:2px;padding:0 12px;flex:1 1 220px;min-width:180px;}
+  .handle-in span{color:var(--muted);font-weight:800;}
+  .handle-in input{background:transparent;border:0;outline:none;color:#fff;
+    font-size:15px;padding:13px 6px;width:100%;font-weight:600;font-family:var(--body);}
+  .submit{appearance:none;border:0;cursor:pointer;font-family:var(--head);font-weight:700;
+    font-size:15px;letter-spacing:1.5px;text-transform:uppercase;color:#fff;
+    padding:15px 30px;border-radius:2px;background:var(--red);transition:background .12s ease;}
+  .submit:hover{background:var(--red-deep);}
+  .submit:disabled{background:#3a2020;color:#8a6a6a;cursor:not-allowed;}
+
+  /* ---------- SUCCESS ---------- */
+  .overlay{position:fixed;inset:0;z-index:100;background:rgba(6,6,6,.92);
+    backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
+  .overlay.on{display:flex;}
+  .modal{background:var(--panel);border:1px solid var(--line);border-radius:4px;
+    max-width:460px;text-align:center;padding:42px 32px;border-top:4px solid var(--red);}
+  .modal .tick{width:76px;height:76px;border-radius:3px;margin:0 auto 20px;
+    background:var(--red);display:flex;align-items:center;justify-content:center;font-size:38px;}
+  .modal h2{font-family:var(--head);font-weight:700;text-transform:uppercase;
+    font-size:32px;margin-bottom:12px;letter-spacing:1px;}
+  .modal p{color:var(--muted);line-height:1.6;font-size:15px;}
+  .modal .pickname{color:var(--red);font-family:var(--head);font-weight:600;
+    text-transform:uppercase;letter-spacing:.5px;}
+  footer{text-align:center;color:#565656;font-size:12px;padding:26px 16px 12px;
+    font-family:var(--head);letter-spacing:2px;text-transform:uppercase;}
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-in">
+      <div class="mark">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M2 6.5 L22 6.5 L18.5 9 L2 9 Z" fill="#fff"/>
+          <path d="M2 11 L22 11 L18.5 13.5 L2 13.5 Z" fill="#FF0000"/>
+          <path d="M2 15.5 L22 15.5 L18.5 18 L2 18 Z" fill="#fff"/>
+        </svg>
+        <span class="wordmark">Coolina</span>
+      </div>
+      <span class="tag">Weekly Challenge</span>
+    </div>
+  </div>
+
+  <header class="hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="hero_poster.jpg">
+      <source src="hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+    <span class="kicker">This Week · Tomahawk Edition</span>
+    <h1>Tomahawk <span class="r">Showdown</span></h1>
+    <p>Perfect medium rare, one clean slice down the middle. Watch every tomahawk below, then vote for the one that earns the crown.</p>
+    <div class="rules">
+      <span class="chip">🔥 <b>9</b> CONTENDERS</span>
+      <span class="chip">🚫 NO VOTING FOR <b>YOURSELF</b></span>
+      <span class="chip">🏆 PICK THE <b>WINNER</b></span>
+    </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="section-label">The <span class="bar-accent">Contenders</span></div>
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <div class="bar">
+    <div class="bar-in">
+      <div class="pickstate" id="pickstate"><span class="none">👆 Tap a reel below to pick your winner</span></div>
+      <label class="handle-in">
+        <span>@</span>
+        <input id="handle" type="text" placeholder="your instagram handle" autocomplete="off" spellcheck="false" />
+      </label>
+      <button class="submit" id="submit" disabled>Cast My Vote</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <div class="tick">🔪</div>
+      <h2>Vote Locked In</h2>
+      <p>Your vote for <span class="pickname" id="donePick"></span> is in. Thanks for repping the challenge — final counts get shared with the group.</p>
+    </div>
+  </div>
+
+  <footer>Coolina Weekly Challenge · Tomahawk Edition</footer>
+
+  <iframe name="gform_sink" style="display:none"></iframe>
+
+<script>
+  var FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSc9F2cM_haVruDXTEE0G-a6tqj0SjPngsuZ10VydOQKiMqFOg/formResponse";
+  var ENTRY_HANDLE = "entry.1898318817";
+  var ENTRY_PICK   = "entry.770678648";
+
+  var CONTENDERS = [
+    {handle:"@egreasy_",           reel:"https://www.instagram.com/reel/DeCyboJsTKX/", value:"@egreasy_ link: https://www.instagram.com/reel/DeCyboJsTKX/"},
+    {handle:"@grillingwithpapi",   reel:"https://www.instagram.com/reel/DeFeLTRgLNo/", value:"@grillingwithpapi link: https://www.instagram.com/reel/DeFeLTRgLNo/"},
+    {handle:"@kooking_with_karl",  reel:"https://www.instagram.com/reel/DeMrmqDPzIz/", value:"@kooking_with_karl link: https://www.instagram.com/reel/DeMrmqDPzIz/"},
+    {handle:"@meat_fusion",        reel:"https://www.instagram.com/reel/DePTQO3uCH7/", value:"@meat_fusion link: https://www.instagram.com/reel/DePTQO3uCH7/"},
+    {handle:"@oklahoma_smokeshow", reel:"https://www.instagram.com/reel/DeQEtZRM7Xu/", value:"@oklahoma_smokeshow link: https://www.instagram.com/reel/DeQEtZRM7Xu/"},
+    {handle:"@samsbbq.al",         reel:"https://www.instagram.com/reel/DeRjYSFxe8O/", value:"@samsbbq.al link: https://www.instagram.com/reel/DeRjYSFxe8O/"},
+    {handle:"@heatersbbq",         reel:"https://www.instagram.com/reel/DdTgX4LS7F_/", value:"@heatersbbq link: https://www.instagram.com/reel/DdTgX4LS7F_/"},
+    {handle:"@bigstusmoked",       reel:"https://www.instagram.com/reel/Dd_RQTKg8Gx/", value:"@bigstusmoked link: https://www.instagram.com/reel/Dd_RQTKg8Gx/"},
+    {handle:"@wolffmanbbq",        reel:"https://www.instagram.com/reel/DeHvNkTix16/", value:"@wolffmanbbq link: https://www.instagram.com/reel/DeHvNkTix16/"}
+  ];
+
+  var picked = null;
+
+  var grid = document.getElementById("grid");
+  CONTENDERS.forEach(function(c, i){
+    var card = document.createElement("div");
+    card.className = "card";
+    card.id = "card-"+i;
+    card.innerHTML =
+      '<div class="badge">★ Your Pick</div>' +
+      '<div class="rank">#'+(i+1)+'</div>' +
+      '<div class="embed">' +
+        (c.noEmbed
+          ? '<a class="fallback noembed" style="background-image:linear-gradient(rgba(0,0,0,.05),rgba(0,0,0,.30)),url(\''+c.thumb+'\')" href="'+c.reel+'" target="_blank" rel="noopener">' +
+              '<span class="play-lg">▶</span>' +
+              '<span class="nb-foot">Watch on Instagram ↗</span>' +
+            '</a>'
+          : '<a class="fallback" href="'+c.reel+'" target="_blank" rel="noopener">' +
+              '<span class="play">▶</span>' + c.handle + '<small>Watch on Instagram ↗</small>' +
+            '</a>' +
+            '<iframe class="ig" src="'+c.reel+'embed/" loading="lazy" scrolling="no" allowfullscreen ' +
+              'onload="this.style.opacity=1"></iframe>'
+        ) +
+      '</div>' +
+      '<div class="cardfoot">' +
+        '<div class="who"><span class="dot"></span><span class="handle">'+c.handle+'</span>' +
+          '<a class="openig" href="'+c.reel+'" target="_blank" rel="noopener">Open ↗</a></div>' +
+        '<button class="pickbtn" data-i="'+i+'">Pick this tomahawk</button>' +
+      '</div>';
+    grid.appendChild(card);
+  });
+
+  function refreshBar(){
+    var ps = document.getElementById("pickstate");
+    var submit = document.getElementById("submit");
+    if(picked === null){
+      ps.innerHTML = '<span class="none">👆 Tap a reel below to pick your winner</span>';
+    } else {
+      ps.innerHTML = 'Your pick: <b>'+CONTENDERS[picked].handle+'</b>';
+    }
+    var handle = document.getElementById("handle").value.trim();
+    submit.disabled = (picked === null || handle.length === 0);
+  }
+
+  grid.addEventListener("click", function(e){
+    var btn = e.target.closest(".pickbtn");
+    if(!btn) return;
+    var i = parseInt(btn.dataset.i, 10);
+    document.querySelectorAll(".card").forEach(function(c){c.classList.remove("picked");});
+    document.querySelectorAll(".pickbtn").forEach(function(b){b.textContent="Pick this tomahawk";});
+    if(picked === i){
+      picked = null;                         // tap your pick again to undo it
+    } else {
+      document.getElementById("card-"+i).classList.add("picked");
+      btn.textContent = "★ Picked · tap to undo";
+      picked = i;
+    }
+    refreshBar();
+  });
+
+  document.getElementById("handle").addEventListener("input", refreshBar);
+
+  document.getElementById("submit").addEventListener("click", function(){
+    if(picked === null) return;
+    var handle = document.getElementById("handle").value.trim();
+    if(!handle){ return; }
+    if(handle[0] !== "@") handle = "@"+handle;
+
+    var f = document.createElement("form");
+    f.action = FORM_ACTION; f.method = "POST"; f.target = "gform_sink";
+    function add(name,val){var inp=document.createElement("input");inp.type="hidden";inp.name=name;inp.value=val;f.appendChild(inp);}
+    add(ENTRY_HANDLE, handle);
+    add(ENTRY_PICK, CONTENDERS[picked].value);
+    document.body.appendChild(f);
+    f.submit();
+
+    document.getElementById("donePick").textContent = CONTENDERS[picked].handle;
+    document.getElementById("overlay").classList.add("on");
+  });
+</script>
+</body>
+</html>
